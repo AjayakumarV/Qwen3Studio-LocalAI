@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+*.wav
+chat_history.db
+*.pptx
+~$*.pptx
+build_*_pptx.py
+inspect_pptx.py
+LAUNCH_KIT_REDDIT_LINKEDIN_ARXIV.md
+EXECUTIVE_PRESENTATION_PLAYBOOK.md
+EXECUTIVE_PRESENTATION_DECK.html
+Push-To-GitHub.ps1

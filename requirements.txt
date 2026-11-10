@@ -1,0 +1,12 @@
+customtkinter>=5.2.0
+faster-whisper>=1.1.0
+sounddevice>=0.5.0
+soundfile>=0.12.1
+scipy>=1.11.0
+numpy>=1.26.0
+pypdf>=4.0.0
+python-docx>=1.1.0
+openpyxl>=3.1.2
+requests>=2.31.0
+pillow>=10.0.0
+huggingface-hub>=0.23.0

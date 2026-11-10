@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software, architecture, or benchmark study in your research or engineering work, please cite it using the metadata below."
+type: software
+title: "Qwen3Studio: High-Throughput 30B Sparse MoE Inference and Symbolic-Gated Hallucination Verification on 4 GB VRAM Workstations"
+authors:
+  - family-names: "Vijayakumar"
+    given-names: "Ajayakumar"
+    email: "ajayav2002@gmail.com"
+version: 2.0.0
+date-released: 2026-11-09
+license: Apache-2.0
+repository-code: "https://github.com/AjayakumarV/Qwen3Studio-LocalAI"
+url: "https://github.com/AjayakumarV/Qwen3Studio-LocalAI"
+keywords:
+  - mixture-of-experts
+  - local-llm
+  - edge-ai
+  - speculative-decoding
+  - hallucination-mitigation
+  - neuro-symbolic-verification
+  - rag
+  - qwen3
+  - llama-cpp
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Vijayakumar"
+      given-names: "Ajayakumar"
+  title: "Beyond PCIe Thrashing and Recursive Sandboxes: High-Throughput 30B Sparse MoE Inference and Symbolic-Gated Hallucination Verification on 4 GB VRAM Workstations"
+  year: 2026
+  month: 11

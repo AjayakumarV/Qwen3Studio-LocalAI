@@ -1,0 +1,8 @@
+Qwen3Studio (LocalAI-Desktop): High-Throughput 30B Sparse MoE Inference and Symbolic-Gated Hallucination Verification on 4 GB VRAM Workstations
+Copyright 2026 Ajayakumar Vijayakumar (ajayav2002@gmail.com)
+
+This product includes software, system architecture, benchmark methodologies, and neuro-symbolic verification pipelines developed by:
+  Ajayakumar Vijayakumar (ajayav2002@gmail.com)
+  Repository: https://github.com/AjayakumarV/Qwen3Studio-LocalAI
+
+Under Section 4(d) of the Apache License, Version 2.0, any redistribution or derivative work must retain this NOTICE file and credit the original author (Ajayakumar Vijayakumar).

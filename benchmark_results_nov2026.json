@@ -1,0 +1,199 @@
+{
+  "vram_top4_mib": 3824,
+  "suite_a_domains": [
+    {
+      "domain": "1. Algorithmic Coding (Python AST)",
+      "prompt_ms": 3119.0,
+      "prompt_tok_s": 19.56,
+      "decode_tok_s": 28.95,
+      "tokens_out": 155,
+      "grounding_pct": 100.0,
+      "accuracy_passed": true,
+      "sample_output": "```python\ndef merge_intervals(intervals: list[list[int]]) -> list[list[int]]:\n    if not intervals:\n        return []\n    \n    # Sort the intervals based on the start time\n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n    \n    for current "
+    },
+    {
+      "domain": "2. Automotive Safety Kinematics (Math)",
+      "prompt_ms": 3194.12,
+      "prompt_tok_s": 23.17,
+      "decode_tok_s": 30.33,
+      "tokens_out": 35,
+      "grounding_pct": 100.0,
+      "accuracy_passed": true,
+      "sample_output": "(1) Reaction Distance: 6 meters  \n(2) Braking Distance: 60 meters  \n(3) Total Stopping Distance: 66 meters"
+    },
+    {
+      "domain": "3. Grounded Document RAG (Pyro-Switch Spec)",
+      "prompt_ms": 3772.41,
+      "prompt_tok_s": 39.5,
+      "decode_tok_s": 29.71,
+      "tokens_out": 101,
+      "grounding_pct": 100.0,
+      "accuracy_passed": true,
+      "sample_output": "The specifications for the Automotive Pyrotechnic Safety Switch PSS-420 are as follows:  \n- **All-Fire Current:** 1.75 A for 2.0 ms  \n- **No-Fire Current:** 0.40 A for 10.0 seconds  \n- **Bridgewire Resistance:** 2.15 Ohms \u00b10.15 Ohms  \n- **Max Deployment Time:** 1"
+    },
+    {
+      "domain": "4. Structured JSON Telemetry Extraction",
+      "prompt_ms": 3193.56,
+      "prompt_tok_s": 22.86,
+      "decode_tok_s": 30.53,
+      "tokens_out": 54,
+      "grounding_pct": 100.0,
+      "accuracy_passed": true,
+      "sample_output": "```json\n{\n  \"module_id\": \"ABX-904\",\n  \"fault_code\": \"DTC-U0155\",\n  \"peak_temp_c\": 88.4,\n  \"status\": \"FAIL_SAFE\"\n}\n```"
+    },
+    {
+      "domain": "5. Multi-Constraint Deductive Logic",
+      "prompt_ms": 2616.07,
+      "prompt_tok_s": 23.7,
+      "decode_tok_s": 29.82,
+      "tokens_out": 25,
+      "grounding_pct": 100.0,
+      "accuracy_passed": true,
+      "sample_output": "The final order of the four benches is:\n\n**Bench B, Bench C, Bench A, Bench D**."
+    }
+  ],
+  "suite_b_context_scaling": [
+    {
+      "total_prompt_tokens": 150,
+      "new_prompt_tokens": 147,
+      "cached_tokens": 3,
+      "prefill_ms": 3942.08,
+      "prefill_tok_s": 37.29,
+      "decode_tok_s": 32.39,
+      "vram_mib": 3831
+    },
+    {
+      "total_prompt_tokens": 574,
+      "new_prompt_tokens": 449,
+      "cached_tokens": 125,
+      "prefill_ms": 8067.89,
+      "prefill_tok_s": 55.65,
+      "decode_tok_s": 30.04,
+      "vram_mib": 3833
+    },
+    {
+      "total_prompt_tokens": 1210,
+      "new_prompt_tokens": 661,
+      "cached_tokens": 549,
+      "prefill_ms": 8839.67,
+      "prefill_tok_s": 74.78,
+      "decode_tok_s": 27.87,
+      "vram_mib": 3837
+    },
+    {
+      "total_prompt_tokens": 2429,
+      "new_prompt_tokens": 1244,
+      "cached_tokens": 1185,
+      "prefill_ms": 17893.39,
+      "prefill_tok_s": 69.52,
+      "decode_tok_s": 24.63,
+      "vram_mib": 3818
+    },
+    {
+      "total_prompt_tokens": 4814,
+      "new_prompt_tokens": 2410,
+      "cached_tokens": 2404,
+      "prefill_ms": 38302.73,
+      "prefill_tok_s": 62.92,
+      "decode_tok_s": 21.14,
+      "vram_mib": 3762
+    }
+  ],
+  "suite_d_hallucination_traps": [
+    {
+      "case": "Trap 1: Fabricated Frequency & Range Drift",
+      "gate_latency_ms": 0.043,
+      "initial_grounding_pct": 80.0,
+      "unverified_numbers": [
+        "79.2",
+        "320.5"
+      ],
+      "syntax_errors": 0,
+      "triggered_critic": true,
+      "critic_repair_ms": 9342.2,
+      "final_grounding_pct": 100.0
+    },
+    {
+      "case": "Trap 2: Subtle Decimal Latency & Power Drift",
+      "gate_latency_ms": 0.016,
+      "initial_grounding_pct": 90.0,
+      "unverified_numbers": [
+        "14.2"
+      ],
+      "syntax_errors": 0,
+      "triggered_critic": true,
+      "critic_repair_ms": 8909.2,
+      "final_grounding_pct": 100.0
+    },
+    {
+      "case": "Trap 3: Broken Python AST Syntax in Code Block",
+      "gate_latency_ms": 0.989,
+      "initial_grounding_pct": 65.0,
+      "unverified_numbers": [],
+      "syntax_errors": 1,
+      "triggered_critic": true,
+      "critic_repair_ms": 10625.8,
+      "final_grounding_pct": 100.0
+    },
+    {
+      "case": "Trap 4: Combined Hallucinated Metric + Syntax Error",
+      "gate_latency_ms": 0.564,
+      "initial_grounding_pct": 45.0,
+      "unverified_numbers": [
+        "99.4"
+      ],
+      "syntax_errors": 1,
+      "triggered_critic": true,
+      "critic_repair_ms": 5735.9,
+      "final_grounding_pct": 100.0
+    },
+    {
+      "case": "Case 5: 100% Grounded & Valid Python Code (Control)",
+      "gate_latency_ms": 0.404,
+      "initial_grounding_pct": 100.0,
+      "unverified_numbers": [],
+      "syntax_errors": 0,
+      "triggered_critic": false,
+      "critic_repair_ms": 0.0,
+      "final_grounding_pct": 100.0
+    }
+  ],
+  "suite_c_qwen06b_vram_mib": 1824,
+  "suite_c_qwen06b_results": [
+    {
+      "domain": "1. Algorithmic Coding (Python AST)",
+      "decode_tok_s": 143.61,
+      "accuracy_passed": true,
+      "grounding_pct": 100.0,
+      "sample_output": "A Python function `merge_intervals(intervals: list[list[int]]) -> list[list[int]]` merges overlapping intervals by sorting them first and then checking for over"
+    },
+    {
+      "domain": "2. Automotive Safety Kinematics (Math)",
+      "decode_tok_s": 148.87,
+      "accuracy_passed": false,
+      "grounding_pct": 100.0,
+      "sample_output": "(1) **Reaction Distance**:  \nThe vehicle travels at $ v = 30 \\, \\text{m/s} $ during the sensor reaction time of $ t = 0.20 \\, \\text{s} $.  \n**Reaction Distance*"
+    },
+    {
+      "domain": "3. Grounded Document RAG (Pyro-Switch Spec)",
+      "decode_tok_s": 133.49,
+      "accuracy_passed": true,
+      "grounding_pct": 100.0,
+      "sample_output": "All-Fire Current: 1.75 A  \nNo-Fire Current: 0.40 A  \nBridgewire Resistance: 2.15 Ohms +/- 0.15 Ohms  \nMax Deployment Time: 1.45 ms"
+    },
+    {
+      "domain": "4. Structured JSON Telemetry Extraction",
+      "decode_tok_s": 112.34,
+      "accuracy_passed": true,
+      "grounding_pct": 100.0,
+      "sample_output": "```json\n{\n  \"module_id\": \"ECU Module ABX-904\",\n  \"fault_code\": \"DTC-U0155\",\n  \"peak_temp_c\": 88.4,\n  \"status\": \"FAIL_SAFE\"\n}\n```"
+    },
+    {
+      "domain": "5. Multi-Constraint Deductive Logic",
+      "decode_tok_s": 111.85,
+      "accuracy_passed": false,
+      "grounding_pct": 100.0,
+      "sample_output": "The correct order is: Bench B \u2192 Bench A \u2192 Bench C \u2192 Bench D."
+    }
+  ]
+}

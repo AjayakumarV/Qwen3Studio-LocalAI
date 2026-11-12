@@ -2,6 +2,7 @@
 
 **Author:** Ajayakumar Vijayakumar (`ajayav2002@gmail.com`)  
 **Affiliation:** Independent AI Systems & Edge Computing Research  
+**DOI:** [10.5281/zenodo.24169118](https://doi.org/10.5281/zenodo.24169118)  
 **Date:** November 2026  
 **Keywords:** Mixture-of-Experts (MoE), Edge AI Inference, Salience-Aware Quantization, Selective Expert Routing, Speculative Decoding, Neuro-Symbolic Verification, Hallucination Mitigation, Retrieval-Augmented Generation (RAG)
 

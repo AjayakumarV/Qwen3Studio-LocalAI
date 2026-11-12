@@ -7,6 +7,7 @@ authors:
     given-names: "Ajayakumar"
     email: "ajayav2002@gmail.com"
 version: 2.0.0
+doi: 10.5281/zenodo.24169118
 date-released: 2026-11-09
 license: Apache-2.0
 repository-code: "https://github.com/AjayakumarV/Qwen3Studio-LocalAI"
@@ -27,5 +28,7 @@ preferred-citation:
     - family-names: "Vijayakumar"
       given-names: "Ajayakumar"
   title: "Beyond PCIe Thrashing and Recursive Sandboxes: High-Throughput 30B Sparse MoE Inference and Symbolic-Gated Hallucination Verification on 4 GB VRAM Workstations"
+  doi: 10.5281/zenodo.24169118
+  url: "https://doi.org/10.5281/zenodo.24169118"
   year: 2026
   month: 11

@@ -1,5 +1,6 @@
 # Qwen3Studio: 30.5B Sparse MoE Local AI at 39.2 tok/s on a 4 GB VRAM Workstation
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24169118.svg)](https://doi.org/10.5281/zenodo.24169118)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Model: Qwen3-30B-A3B](https://img.shields.io/badge/Model-Qwen3--30B--A3B%20%28UD--IQ3__XXS%29-blue)](https://huggingface.co/unsloth/Qwen3-30B-A3B-GGUF)
 [![GPU VRAM: 4 GB](https://img.shields.io/badge/GPU%20VRAM-4%20GB%20%283%2C762%20MiB%20Used%29-purple)](#3-hardware-memory-partitioning-architecture)
@@ -155,6 +156,8 @@ If you use this architecture, benchmark study, or verification pipeline in your 
   author  = {Vijayakumar, Ajayakumar},
   year    = {2026},
   month   = {November},
+  doi     = {10.5281/zenodo.24169118},
+  url     = {https://doi.org/10.5281/zenodo.24169118},
   note    = {Available at https://github.com/AjayakumarV/Qwen3Studio-LocalAI}
 }
 ```

@@ -4,13 +4,13 @@
 [![Model: Qwen3-30B-A3B](https://img.shields.io/badge/Model-Qwen3--30B--A3B%20%28UD--IQ3__XXS%29-blue)](https://huggingface.co/unsloth/Qwen3-30B-A3B-GGUF)
 [![GPU VRAM: 4 GB](https://img.shields.io/badge/GPU%20VRAM-4%20GB%20%283%2C762%20MiB%20Used%29-purple)](#3-hardware-memory-partitioning-architecture)
 [![Speed: 39.2 tok/s](https://img.shields.io/badge/Speed-39.2%20tok%2Fs%20%285.7x%20Speedup%29-brightgreen)](#5-empirical-benchmarks--ablation-study)
-[![Verification: <1ms Symbolic+AST Gate](https://img.shields.io/badge/Hallucination%20Gate-0.40ms%20Symbolic%20%2B%20AST%20Critic-orange)](#4-the-symbolic-gated-conditional-neural-critic-verifierpy)
+[![Verification: <1ms Symbolic+AST Gate](https://img.shields.io/badge/Hallucination%20Gate-0.40ms%20Symbolic%20%2B%20AST%20Critic-orange)](#4-the-symbolic-gated-conditional-neural-critic)
 
 ![Qwen3Studio 39.2 tok/s Benchmark Overview](SOCIAL_PREVIEW_CARD.png)
 
 **Run a frontier 30.5-billion-parameter Mixture-of-Experts (`Qwen3-30B-A3B`) model 100% offline at `39.2 tokens/sec` with a `291 ms` first-token latency on a standard 4 GB VRAM + 32 GB RAM workstation—while leaving `20.5 GB` of system RAM completely free.**
 
-Includes a standalone native Windows desktop application (`app.py` / `Qwen3Studio.exe`—zero browser dependency), **0 MB VRAM offline Faster-Whisper Speech-to-Text (STT)**, **offline Windows SAPI Text-to-Speech (TTS)**, **sub-15ms BM25 Top-5 multi-format document RAG** (`PDF`, `DOCX`, `XLSX`, `CSV`, `JSON`, source code), **`Qwen3-0.6B` Draft Speculative Decoding** (`+45.1%` 8-expert speedup), and a **`<1 ms` (`0.403 ms` avg) Symbolic-Gated Conditional Neural Critic (`verifier.py`)** that eliminates fabricated numbers and broken Python code without executing untrusted scripts.
+Includes a standalone native Windows desktop application (zero browser dependency), **0 MB VRAM offline Faster-Whisper Speech-to-Text (STT)**, **offline Windows SAPI Text-to-Speech (TTS)**, **sub-15ms BM25 Top-5 multi-format document RAG** (`PDF`, `DOCX`, `XLSX`, `CSV`, `JSON`, source code), **`Qwen3-0.6B` Draft Speculative Decoding** (`+45.1%` 8-expert speedup), and a **`<1 ms` (`0.403 ms` avg) Symbolic-Gated Conditional Neural Critic** that eliminates fabricated numbers and broken Python code without executing untrusted scripts.
 
 ---
 
@@ -19,7 +19,7 @@ Includes a standalone native Windows desktop application (`app.py` / `Qwen3Studi
 * **5.7× Faster Token Generation (`6.89` $\rightarrow$ `39.18–39.35 tok/s`):** Matches MIT & UC Berkeley's `FreeToken` 8 GB RTX 4060 benchmark (`~39 tok/s`) on **half the GPU VRAM (4 GB NVIDIA T1000)**, and runs **85% faster** than `FreeToken`'s 4 GB RTX 2050 benchmark (`21.3 tok/s`).
 * **147× Faster Time-to-First-Token (`42,811 ms` $\rightarrow$ `290.9 ms`):** Eliminates cold `mmap` page-fault stalls via `--load-mode none` aligned SIMD buffers, single-slot prefix pinning (`-np 1 --keep -1`), and KV-shift reuse (`--cache-reuse 256`).
 * **+45.1% Full 8-Expert Speedup via `0.6B` Speculative Decoding (`18.68` $\rightarrow$ `27.11 tok/s`):** Achieves a **94.8% draft token acceptance rate (`91/96` tokens)** when pairing `Qwen3-0.6B` (`386 MB`) with `Qwen3-30B-A3B`.
-* **`0.403 ms` Zero-Execution Symbolic & AST Critic (`verifier.py`):** Audits every number, percentage, and Python code block (`ast.parse`) in `<1 ms`—adding **0 ms of LLM overhead** when Grounding = `100%`, and automatically triggering a Pass-2 Low-Temperature (`0.10`) Neural Critic when a hallucination or syntax bug is detected (restoring `45%–90%` $\rightarrow$ **`100.0%` Grounding Score** across all defect traps).
+* **`0.403 ms` Zero-Execution Symbolic & AST Critic:** Audits every number, percentage, and Python code block (`ast.parse`) in `<1 ms`—adding **0 ms of LLM overhead** when Grounding = `100%`, and automatically triggering a Pass-2 Low-Temperature (`0.10`) Neural Critic when a hallucination or syntax bug is detected (restoring `45%–90%` $\rightarrow$ **`100.0%` Grounding Score** across all defect traps).
 
 ---
 
@@ -62,8 +62,8 @@ Imagine trying to run a **world-class engineering consulting firm** inside a sma
    * **Our Fix:** We permanently seated the **Receptionist (Router) and the 7 busiest departments right on the fast 4 GB GPU workbench (`-ncmoe 41`)**, and instructed the Receptionist to **only call the Top-4 most confident doctors (`expert_used_count=4`)** using only our **8 fastest Senior Couriers (Intel P-Cores, `-Cr 0-15`)** instead of slow interns (Efficiency Cores). **Result: 0.29s start and 39.2 tokens/sec!**
 3. **Pillar 3 ("The Speedy Junior Assistant Drafting Ahead — `0.6B` Speculative Decoding"):**
    * When a complex problem requires consulting all 8 senior doctors, a fast **Junior Assistant (`Qwen3-0.6B`)** sitting on the GPU drafts 3 words ahead in an instant, and the 8 senior doctors simply stamp **"Approved" on all 3 words at once (`94.8%` approval rate)**—boosting 8-doctor speed by **+45.1%**.
-4. **Pillar 4 ("The `<1 Millisecond` Exit-Door Fact-Checker — `verifier.py`"):**
-   * Before any answer reaches your screen, an automated **Exit-Door Inspector (`verifier.py`)** checks every number, percentage, and Python code block against your uploaded PDF/Excel file in **0.40 milliseconds**. If every number matches (`100% Grounding`), it passes immediately with **zero delay**. If even one number is invented, the Inspector blocks it and forces a **100% verified rewrite**.
+4. **Pillar 4 ("The `<1 Millisecond` Exit-Door Fact-Checker"):**
+   * Before any answer reaches your screen, an automated **Exit-Door Inspector** checks every number, percentage, and Python code block against your uploaded PDF/Excel file in **0.40 milliseconds**. If every number matches (`100% Grounding`), it passes immediately with **zero delay**. If even one number is invented, the Inspector blocks it and forces a **100% verified rewrite**.
 
 ---
 
@@ -90,9 +90,9 @@ flowchart LR
 
 ---
 
-## 4. The Symbolic-Gated Conditional Neural Critic (`verifier.py`)
+## 4. The Symbolic-Gated Conditional Neural Critic
 
-Unlike MIT CSAIL's *Recursive Language Models (RLM)* (which runs 5–15 recursive Python REPL calls taking 25–45 seconds and executing untrusted LLM-generated code), `verifier.py` enforces zero-hallucination grounding in **two deterministic-gated stages**:
+Unlike MIT CSAIL's *Recursive Language Models (RLM)* (which runs 5–15 recursive Python REPL calls taking 25–45 seconds and executing untrusted LLM-generated code), our neuro-symbolic verification pipeline enforces zero-hallucination grounding in **two deterministic-gated stages**:
 
 1. **Stage 1 (`0.403 ms` Deterministic Symbolic & AST Gate):** Extracts all significant numbers (`>=10`, decimals, `%`) from the Pass-1 draft and cross-checks them against your prompt + retrieved document chunks while statically parsing any fenced Python code via `ast.parse()`.
 2. **Stage 2 (Conditional Low-Temperature Neural Critic):**

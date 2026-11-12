@@ -232,7 +232,7 @@
     <p>Overriding <code>qwen3moe.expert_used_count=int:4</code> preserves &gt;92% of the router's softmax probability mass while halving DRAM traffic from 1.52 GB/tok to 0.75 GB/tok. Furthermore, locking thread affinity to the i7-12700K's 8 Performance cores (<code>-Cr 0-15 --prio 2 --poll 100</code>) eliminates Windows 11 Efficiency-core barrier stalls.</p>
 
     <h3>C. Symbolic-Gated Conditional Neural Critic</h3>
-    <p class="no-indent">Upon completing Pass-1 draft <em>Y</em><sub>draft</sub>, <code>verifier.py</code> extracts all non-trivial numeric claims <em>N</em>(<em>Y</em><sub>draft</sub>) and cross-checks them against source context <em>N</em>(<em>X</em><sub>source</sub>) while parsing fenced code blocks via <code>ast.parse()</code> in &lt;2 ms:</p>
+    <p class="no-indent">Upon completing Pass-1 draft <em>Y</em><sub>draft</sub>, the deterministic symbolic gate extracts all non-trivial numeric claims <em>N</em>(<em>Y</em><sub>draft</sub>) and cross-checks them against source context <em>N</em>(<em>X</em><sub>source</sub>) while parsing fenced code blocks via <code>ast.parse()</code> in &lt;2 ms:</p>
     <div class="equation">
       <em>G</em> = max(0, 100 &minus; 8 &middot; |<em>N</em>(<em>Y</em><sub>draft</sub>) \ <em>N</em>(<em>X</em><sub>source</sub>)| &minus; 25 &middot; |ASTErrors|)
     </div>
@@ -402,19 +402,19 @@
           <tr class="highlight-row">
             <td>3. Fact &amp; Code Verification</td>
             <td><strong>MIT CSAIL RLM [5]:</strong> 5–15 recursive Python REPL sub-calls executing LLM code (25–45 s).</td>
-            <td><strong>Symbolic-Gated Conditional Neural Critic (<code>verifier.py</code>).</strong></td>
+            <td><strong>Symbolic-Gated Conditional Neural Critic.</strong></td>
             <td><strong>Zero code-execution risk</strong>, <strong>0 ms overhead</strong> when Grounding = 100%, and <strong>2.8 s recovery</strong> (84% &rarr; 100%) on hallucination traps.</td>
           </tr>
           <tr>
             <td>4. Long-Document RAG</td>
             <td><strong>MIT DuoAttention [11]:</strong> Full-cache retrieval heads + streaming heads in GPU VRAM.</td>
-            <td><strong>CPU-Side BM25 Top-5 Chunk Indexer (<code>file_tools.py</code>) + <code>min_p=0.08, temp=0.2</code>.</strong></td>
+            <td><strong>CPU-Side BM25 Top-5 Chunk Indexer + <code>min_p=0.08, temp=0.2</code>.</strong></td>
             <td>Consumes <strong>0 MB GPU VRAM</strong> for unqueried pages; retrieves Top-5 sections in <strong>&lt;15 ms</strong>.</td>
           </tr>
           <tr>
             <td>5. Context &amp; Voice UX</td>
             <td><strong>MIT StreamingLLM [10] &amp; TinyChat:</strong> Attention sinks + separate CLI tools.</td>
-            <td><strong><code>--keep -1 -np 1</code> + Native Windows App (<code>Qwen3Studio.exe</code>) + CPU INT8 Whisper.</strong></td>
+            <td><strong><code>--keep -1 -np 1</code> + Native Desktop Suite + CPU INT8 Whisper.</strong></td>
             <td><strong>147&times; faster TTFT (290.9 ms)</strong> and <strong>0 MB GPU VRAM</strong> offline voice dictation.</td>
           </tr>
           <tr class="highlight-row">

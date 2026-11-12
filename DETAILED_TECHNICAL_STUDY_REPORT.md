@@ -14,10 +14,10 @@ Recent academic research from **MIT HAN Lab** (`FreeToken`, `DuoAttention`, `LSe
 2. **MIT CSAIL's Recursive Language Models (RLM)** verifies facts and math across documents by putting the document in a **Python REPL** and making **5 to 15 recursive LLM sub-calls** that execute generated Python code—incurring 20–45 seconds of latency per query and introducing arbitrary code execution risk.
 
 ### What We Built & Proved Instead (Our Distinct Approach)
-We designed, implemented, and benchmarked an **independent, hardware-conscious Local AI architecture** (`Qwen3Studio.exe`) that intentionally avoids MIT's dynamic PCIe streaming and recursive Python REPL execution:
+We designed, implemented, and benchmarked an **independent, hardware-conscious Local AI architecture** (`Qwen3Studio`) that intentionally avoids MIT's dynamic PCIe streaming and recursive Python REPL execution:
 * **39.18–39.35 tokens/sec** generation speed (**matching MIT FreeToken's 8 GB RTX 4060 benchmark on a 4 GB NVIDIA T1000—using half the VRAM!**)
 * **27.11 tokens/sec (+45.1% speedup)** on Full 8-Expert accuracy mode via **Upgrade #1: `Qwen3-0.6B` Draft-Model Speculative Decoding** (`94.8%` draft token acceptance rate).
-* **100% Hallucination Trap Recovery** (`84.0% → 100.0%` Grounding Score in a single verification pass) via **Upgrade #3: Two-Pass Deterministic Symbolic + Neural Critic Verification (`verifier.py`)**—achieving deterministic numerical and AST syntax verification in **2 passes (~6 seconds)** with **zero arbitrary code execution**.
+* **100% Hallucination Trap Recovery** (`84.0% → 100.0%` Grounding Score in a single verification pass) via **Upgrade #3: Two-Pass Deterministic Symbolic + Neural Critic Verification**—achieving deterministic numerical and AST syntax verification in **2 passes (~6 seconds)** with **zero arbitrary code execution**.
 
 ---
 
@@ -27,10 +27,10 @@ We designed, implemented, and benchmarked an **independent, hardware-conscious L
 | :--- | :--- | :--- | :--- |
 | **1. MoE GPU/CPU Execution (Speed)** | **MIT FreeToken (2026):** Dynamic PCIe expert streaming (`q*` policy) with double-buffering across PCIe (~39 tok/s on 8 GB RTX 4060). | **Static Frequency-Based GPU Pinning (`-ncmoe 41`) + Dynamic Top-4 Expert Pruning (`expert_used_count=4`) + P-Core Pinning (`-Cr 0-15 --load-mode none`).** | **OUR APPROACH WINS ON 4 GB VRAM:** Dynamic PCIe caching (`--moe-cache-mib`) thrashed our 4 GB T1000 (`8.57 tok/s`). Our static split hits **39.2–39.4 tok/s** on **half the VRAM (4 GB vs 8 GB)**. |
 | **2. Speculative Decoding (Upgrade #1)** | **MIT Medusa / Eagle / OmniServe:** Custom multi-head draft adapters compiled into TensorRT-LLM for datacenter GPUs. | **Heterogeneous Draft-Target Co-Execution:** `386.6 MB Qwen3-0.6B-UD-Q4_K_XL` in VRAM drafting 3 tokens (`p_min=0.80`) for hybrid `Qwen3-30B-A3B`. | **OUR APPROACH WINS ON 8-EXPERT SPEED:** Achieves **88.8%–94.8% draft acceptance** and boosts Full 8-Expert mode by **+45.1%** (`18.68 → 27.11 tok/s`) with zero custom kernel compilation. |
-| **3. Fact, Math & Code Verification (Upgrade #3)** | **MIT CSAIL RLM (Zhang & Khattab):** Multi-turn Recursive Python REPL where the LLM writes & executes Python code across 5–15 recursive sub-calls. | **2-Pass Symbolic + Neural Critic (`verifier.py`):** Pass 1 Draft → `<2 ms` Regex Numerical & `ast.parse()` Syntax Audit → Pass 2 Low-Temp (`0.10`) Critic. | **OUR APPROACH WINS ON LATENCY & SAFETY:** Completes in **2 fixed passes (~6s vs 25–45s for RLM)**, requires zero arbitrary code execution, and restored Grounding Score from **84.0% to 100.0%**. |
-| **4. Long-Document Retrieval (RAG)** | **MIT HAN Lab DuoAttention & LServe:** Splits attention heads into Retrieval Heads and Streaming Heads inside a massive GPU KV cache. | **CPU-Side BM25 Top-5 Chunk Indexer (`file_tools.py`) + Task-Aware Logit Truncation (`temp=0.20, min_p=0.08`) + Strict Citations.** | **OUR APPROACH WINS ON 4 GB VRAM:** Keeps **0 MB** of unqueried document text in GPU VRAM, retrieves Top-5 chunks in `<15 ms`, and prevents context overflow. |
+| **3. Fact, Math & Code Verification (Upgrade #3)** | **MIT CSAIL RLM (Zhang & Khattab):** Multi-turn Recursive Python REPL where the LLM writes & executes Python code across 5–15 recursive sub-calls. | **2-Pass Symbolic + Neural Critic:** Pass 1 Draft → `<2 ms` Regex Numerical & `ast.parse()` Syntax Audit → Pass 2 Low-Temp (`0.10`) Critic. | **OUR APPROACH WINS ON LATENCY & SAFETY:** Completes in **2 fixed passes (~6s vs 25–45s for RLM)**, requires zero arbitrary code execution, and restored Grounding Score from **84.0% to 100.0%**. |
+| **4. Long-Document Retrieval (RAG)** | **MIT HAN Lab DuoAttention & LServe:** Splits attention heads into Retrieval Heads and Streaming Heads inside a massive GPU KV cache. | **CPU-Side BM25 Top-5 Chunk Indexer + Task-Aware Logit Truncation (`temp=0.20, min_p=0.08`) + Strict Citations.** | **OUR APPROACH WINS ON 4 GB VRAM:** Keeps **0 MB** of unqueried document text in GPU VRAM, retrieves Top-5 chunks in `<15 ms`, and prevents context overflow. |
 | **5. Multi-Turn Context Stability** | **MIT StreamingLLM:** Retains initial "Attention Sink" tokens while sliding the KV window over millions of tokens. | **Single-Slot Prefix Pinning (`-np 1 --keep -1`) + KV Shift Reuse (`--cache-reuse 256`) + Startup 1-Token Auto-Warmup.** | **ADAPTED FOR DESKTOP:** Cuts first-turn prompt latency **147×** (from `42,811 ms` down to **`290.9 ms`** / `82.5 prompt tok/s`). |
-| **6. Voice & File Desktop Workflow** | **MIT TinyChat / Linux Research CLIs:** Separate Python CLI scripts or GPU-resident Whisper pipelines competing for VRAM. | **Unified Native Windows App (`Qwen3Studio.exe`):** Zero-VRAM CPU INT8 Faster-Whisper STT + Offline Windows TTS + Multi-Format File Parser. | **OUR APPROACH WINS ON UX:** 100% standalone native Windows app pinned to Taskbar; Whisper STT consumes **0 MB of the 4 GB GPU VRAM**. |
+| **6. Voice & File Desktop Workflow** | **MIT TinyChat / Linux Research CLIs:** Separate Python CLI scripts or GPU-resident Whisper pipelines competing for VRAM. | **Unified Native Windows Desktop Suite:** Zero-VRAM CPU INT8 Faster-Whisper STT + Offline Windows TTS + Multi-Format File Parser. | **OUR APPROACH WINS ON UX:** 100% standalone native Windows app pinned to Taskbar; Whisper STT consumes **0 MB of the 4 GB GPU VRAM**. |
 
 ---
 
@@ -49,7 +49,7 @@ We downloaded `Qwen3-0.6B-UD-Q4_K_XL.gguf` (**386.6 MB**) into `~/LocalAI/models
 
 ---
 
-## 4. Deep Dive: Upgrade #3 — Two-Pass Deterministic Symbolic + Neural Critic Loop (`verifier.py`)
+## 4. Deep Dive: Upgrade #3 — Two-Pass Deterministic Symbolic + Neural Critic Loop
 
 ### 4.1 Why We Designed This Instead of MIT CSAIL's RLM
 MIT CSAIL's **Recursive Language Models (RLM)** treats every prompt/document as a Python REPL variable and relies on the LLM writing and executing Python code across 5 to 15 recursive sub-calls. While effective on cloud APIs, RLM has three drawbacks for a local workstation:
@@ -57,8 +57,8 @@ MIT CSAIL's **Recursive Language Models (RLM)** treats every prompt/document as 
 2. **Execution Risk:** Running arbitrary LLM-generated Python scripts against local files carries side-effect and infinite-loop risks.
 3. **Token Bloat:** Recursive REPL traces quickly fill an 8K VRAM KV cache.
 
-### 4.2 How Our 2-Pass Symbolic + Neural Critic (`verifier.py`) Works
-Instead of multi-turn code execution, our `[verifier.py](verifier.py)` separates verification into a **<2ms deterministic symbolic audit** followed by a **single targeted neural critic pass**:
+### 4.2 How Our 2-Pass Symbolic + Neural Critic Works
+Instead of multi-turn code execution, our verification architecture separates verification into a **<2ms deterministic symbolic audit** followed by a **single targeted neural critic pass**:
 * **Pass 1 (Fast Draft at ~30–39 tok/s):** Generates the initial answer streamed live to the user.
 * **Step 1.5 — Deterministic Symbolic & AST Audit (`run_symbolic_audit` in `<2 ms`):**
   1. **Numerical Cross-Check:** Extracts all significant numbers, decimals, and percentages (`>= 10`, `%`, or `.`) from the draft and verifies whether they exist verbatim in the uploaded source chunks or user prompt. Any unverified number is explicitly flagged.

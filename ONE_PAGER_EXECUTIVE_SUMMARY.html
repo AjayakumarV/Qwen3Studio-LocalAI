@@ -210,13 +210,13 @@
       <tr class="highlight">
         <td>3. Fact &amp; Code Verification (Upgrade #3)</td>
         <td><strong>MIT CSAIL RLM:</strong> 5–15 recursive Python REPL sub-calls executing LLM-generated code (~25–45s latency).</td>
-        <td><strong>2-Pass Symbolic + Neural Critic (<code>verifier.py</code>):</strong> Pass 1 Draft → <code>&lt;2 ms</code> Regex Number &amp; <code>ast.parse()</code> Check → Pass 2 Critic.</td>
+        <td><strong>2-Pass Symbolic + Neural Critic:</strong> Pass 1 Draft → <code>&lt;2 ms</code> Regex Number &amp; <code>ast.parse()</code> Check → Pass 2 Critic.</td>
         <td><strong>Ours Wins on Latency &amp; Safety:</strong> Zero arbitrary code execution risk; completes in <strong>2 passes (~6s)</strong> and restored Grounding from <strong>84% → 100%</strong>.</td>
       </tr>
       <tr>
         <td>4. Long-Document RAG</td>
         <td><strong>MIT DuoAttention / LServe:</strong> Retrieval + Streaming heads inside a massive GPU KV cache.</td>
-        <td><strong>CPU-Side BM25 Top-5 Chunk Indexer (<code>file_tools.py</code>) + Dynamic <code>min_p=0.08, temp=0.2</code> Grounding.</strong></td>
+        <td><strong>CPU-Side BM25 Top-5 Chunk Indexer + Dynamic <code>min_p=0.08, temp=0.2</code> Grounding.</strong></td>
         <td><strong>Ours Wins on 4 GB Memory:</strong> Uses 0 MB GPU VRAM for unqueried pages; retrieves Top-5 sections in <code>&lt;15 ms</code>.</td>
       </tr>
       <tr>
@@ -228,7 +228,7 @@
       <tr>
         <td>6. Voice &amp; Desktop UX</td>
         <td><strong>MIT TinyChat / Linux CLIs:</strong> Separate command-line scripts or GPU-resident Whisper competing for VRAM.</td>
-        <td><strong>Pinned Native Windows App (<code>Qwen3Studio.exe</code>):</strong> CPU INT8 Faster-Whisper STT (0 MB VRAM) + Multi-File RAG.</td>
+        <td><strong>Pinned Native Windows Desktop Suite:</strong> CPU INT8 Faster-Whisper STT (0 MB VRAM) + Multi-File RAG.</td>
         <td><strong>Ours Wins on Workstation UX:</strong> 100% offline Windows GUI pinned to Taskbar; voice dictation uses 0 MB GPU VRAM.</td>
       </tr>
     </tbody>

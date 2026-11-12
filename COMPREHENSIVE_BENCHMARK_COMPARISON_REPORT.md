@@ -1,6 +1,6 @@
 # Comprehensive Benchmark Comparison & Global Uniqueness Report (November 2026)
 
-**System Under Test:** `Qwen3Studio` — Optimized `Qwen3-30B-A3B (UD-IQ3_XXS)` + `Qwen3-0.6B` Speculative Draft + `<1 ms` Symbolic-Gated Conditional Neural Critic (`verifier.py`)  
+**System Under Test:** `Qwen3Studio` — Optimized `Qwen3-30B-A3B (UD-IQ3_XXS)` + `Qwen3-0.6B` Speculative Draft + `<1 ms` Symbolic-Gated Conditional Neural Critic  
 **Workstation Hardware:** 12th Gen Intel Core i7-12700K (8P + 4E Cores, 32 GB RAM) + NVIDIA T1000 (4,096 MiB VRAM)  
 **Evaluation Date:** November 9, 2026
 
@@ -17,7 +17,7 @@ As of **November 2026**, a global audit of academic literature (arXiv, ACM SOSP,
    * **KTransformers (ACM SOSP 2025/2026)** relies on Intel Xeon **AMX (Advanced Matrix Extensions)** hardware units, which do not exist on standard corporate desktop CPUs like the 12th-Gen Intel Core i7-12700K.
    * **PowerInfer** requires specially trained **ReLU-activated models** (`ReluFalcon` / `ReluLLaMA`) and offline neuron predictors, making it incompatible with modern SwiGLU/SiLU frontier models like `Qwen3-30B-A3B`.
 3. **Sub-Millisecond (`0.016–0.989 ms`) Zero-Execution Symbolic & AST Gate vs. 25–45s Recursive Python Sandboxes (`MIT CSAIL RLM` & `VeNRA`):**
-   * While **MIT CSAIL's `RLM`** and **`VeNRA`** execute LLM-generated Python code inside a subprocess across 5–15 recursive turns (taking 25–45 seconds and creating enterprise code-execution risks), our **`verifier.py`** audits every number, decimal, percentage, and Python AST syntax tree in **`0.016 ms to 0.989 ms`** with **zero code execution**, and only runs a second-pass repair when `Grounding Score < 100%`.
+   * While **MIT CSAIL's `RLM`** and **`VeNRA`** execute LLM-generated Python code inside a subprocess across 5–15 recursive turns (taking 25–45 seconds and creating enterprise code-execution risks), our **Symbolic-Gated Conditional Neural Critic** audits every number, decimal, percentage, and Python AST syntax tree in **`0.016 ms to 0.989 ms`** with **zero code execution**, and only runs a second-pass repair when `Grounding Score < 100%`.
 
 ---
 
@@ -106,7 +106,7 @@ While MIT's `FreeToken` on a 4 GB RTX 2050 capped at `~21 tok/s` and failed at `
 
 ---
 
-### 5.3 Suite D: 5-Scenario Hallucination-Trap & Python AST Verification Benchmark (`verifier.py`)
+### 5.3 Suite D: 5-Scenario Hallucination-Trap & Python AST Verification Benchmark
 We tested five controlled hallucination and syntax-bug scenarios against the **Automotive Radar Sensor ARS-510 Specification** (`76.5 GHz`, `250.0 m`, `1.2°`, `4.8 W`, `18.5 ms`) to measure the exact speed and accuracy of our **Symbolic-Gated Conditional Neural Critic**:
 
 | Test Scenario | Injected Defect / Hallucination | Symbolic Gate Latency (`ms`) | Initial Grounding Score | Flagged Anomalies by `<1 ms` Gate | Triggered Pass-2 Critic? | Final Grounding Score After Critic |

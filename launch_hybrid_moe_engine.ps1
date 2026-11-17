@@ -18,10 +18,10 @@ $ModelPath = Join-Path $BaseDir "models\Qwen3-30B-A3B-UD-IQ3_XXS.gguf"
 $DraftPath = Join-Path $BaseDir "models\Qwen3-0.6B-UD-Q4_K_XL.gguf"
 
 if (-not (Test-Path $ServerExe)) {
-    Write-Error "llama-server.exe not found at $ServerExe. Run 'python setup_localai.py' first."
+    Write-Error "llama-server.exe not found at $ServerExe. Run 'python provision_workstation.py' first."
 }
 if (-not (Test-Path $ModelPath)) {
-    Write-Error "Model file not found at $ModelPath. Run 'python setup_localai.py' first."
+    Write-Error "Model file not found at $ModelPath. Run 'python provision_workstation.py' first."
 }
 
 $ArgsList = @(

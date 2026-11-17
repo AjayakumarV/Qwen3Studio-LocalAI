@@ -14,8 +14,8 @@ import time
 from pathlib import Path
 import requests
 
-from verifier import run_symbolic_audit, build_critic_verification_messages
-from file_tools import build_chunks_for_text, AttachedFile, format_attachments_for_prompt
+from symbolic_critic_gate import run_symbolic_audit, build_critic_verification_messages
+from bm25_document_rag import build_chunks_for_text, AttachedFile, format_attachments_for_prompt
 
 APP_DIR = Path(__file__).resolve().parent
 LOCALAI_HOME = Path(os.environ.get("LOCALAI_HOME", str(Path.home() / "LocalAI")))
@@ -393,7 +393,7 @@ def main():
     start_server(opt_args)
     run_chat([sys_msg, {"role": "user", "content": "/no_think hi"}], max_tokens=2)
 
-    out_file = APP_DIR / "benchmark_results_nov2026.json"
+    out_file = APP_DIR / "moe_evaluation_telemetry.json"
     out_file.write_text(json.dumps(results, indent=2), encoding="utf-8")
     print(f"Saved complete benchmark data to {out_file}")
 

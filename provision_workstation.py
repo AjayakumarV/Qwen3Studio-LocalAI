@@ -9,7 +9,7 @@ Automatically sets up:
 
 Usage:
   pip install -r requirements.txt
-  python setup_localai.py
+  python provision_workstation.py
 """
 
 import argparse
@@ -124,7 +124,7 @@ def main():
     install_llama_cpp()
     install_models(skip_30b=args.skip_30b)
     print("\n[SUCCESS] All components installed! Launch the desktop studio with:")
-    print("  python app.py")
+    print("  python qwen3_studio.py")
 
 
 if __name__ == "__main__":

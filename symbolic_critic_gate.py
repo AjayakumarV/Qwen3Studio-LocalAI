@@ -1,5 +1,5 @@
 """
-Two-Pass Draft -> Critic Self-Verification & Deterministic Grounding Auditor (verifier.py)
+Two-Pass Draft -> Critic Self-Verification & Deterministic Grounding Auditor (symbolic_critic_gate.py)
 Our Hardware-Optimal Alternative to MIT CSAIL's Multi-Turn Recursive REPL (RLM).
 
 How it works:

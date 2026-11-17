@@ -7,7 +7,7 @@
 [![Speed: 39.2 tok/s](https://img.shields.io/badge/Speed-39.2%20tok%2Fs%20%285.7x%20Speedup%29-brightgreen)](#5-empirical-benchmarks--ablation-study)
 [![Verification: <1ms Symbolic+AST Gate](https://img.shields.io/badge/Hallucination%20Gate-0.40ms%20Symbolic%20%2B%20AST%20Critic-orange)](#4-the-symbolic-gated-conditional-neural-critic)
 
-![Qwen3Studio 39.2 tok/s Benchmark Overview](SOCIAL_PREVIEW_CARD.png)
+![Qwen3Studio 39.2 tok/s Benchmark Overview](Qwen3Studio_Architecture_Overview.png)
 
 **Run a frontier 30.5-billion-parameter Mixture-of-Experts (`Qwen3-30B-A3B`) model 100% offline at `39.2 tokens/sec` with a `291 ms` first-token latency on a standard 4 GB VRAM + 32 GB RAM workstation—while leaving `20.5 GB` of system RAM completely free.**
 
@@ -42,12 +42,12 @@ python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
 
-# 2. Automated 1-command download of llama.cpp CUDA binaries, Qwen3-30B-A3B (UD-IQ3_XXS),
+# 2. Automated 1-command provisioning of llama.cpp CUDA binaries, Qwen3-30B-A3B (UD-IQ3_XXS),
 #    Qwen3-0.6B speculative draft model, and offline Faster-Whisper base.en STT
-python setup_localai.py
+python provision_workstation.py
 
 # 3. Launch the native desktop studio!
-python app.py
+python qwen3_studio.py
 ```
 
 ---
@@ -129,6 +129,7 @@ Unlike MIT CSAIL's *Recursive Language Models (RLM)* (which runs 5–15 recursiv
 | :--- | :--- | :---: | :---: | :--- |
 | **Our `Qwen3Studio` Architecture** | **Standard PC (i7-12700K + 4 GB T1000)** | **32.8 – 39.4 tok/s** *(Top-4)*<br/>**27.1 tok/s** *(8-Exp + 0.6B Draft)* | **8,192 Tokens (Stable @ 3.76 GB)** | **`0.403 ms` Symbolic + AST Gate + Pass-2 Critic** |
 | **MIT & UC Berkeley `FreeToken` (`v0.1.2`, 2026)** | 8 GB RTX 4060 / 4 GB RTX 2050 | **20.7 – 21.8 tok/s** *(on 4 GB RTX 2050)* | **4,096 Tokens** *(Crashes at 8,192 on 4 GB)* | None (Raw LLM output) |
+| **`Colibri` (`JustVugg/colibri`, 2026)** | NVMe SSD Disk-Streaming Hierarchy | **0.05 – 1.5 tok/s** *(SSD disk-bound; no expert pruning)* | 4,096 – 8,192 Tokens | None (Raw LLM output) |
 | **`KTransformers` (ACM SOSP 2025/2026)** | Intel Xeon Server (Requires AMX) | **~11 – 14 tok/s** *(No AMX on desktop i7)* | 4,096 – 8,192 Tokens | None (Raw LLM output) |
 | **`PowerInfer` (SJTU) & `Fiddler` (ICLR 2025)** | ReLU-Only Models / Linux PyTorch Ops | **Incompatible (SwiGLU) / ~9 tok/s PCIe** | 2,048 – 4,096 Tokens | None (Raw LLM output) |
 | **MIT CSAIL `RLM` (NeurIPS 2026) & `VeNRA`** | Datacenter GPU + Python Subprocess | **25 – 45 sec latency** *(5–15 REPL calls)* | External REPL Variable | Executes untrusted LLM Python code |
@@ -137,10 +138,10 @@ Unlike MIT CSAIL's *Recursive Language Models (RLM)* (which runs 5–15 recursiv
 
 ## 6. Included Research Papers & Reports
 
-* **[IEEE / arXiv Research Paper (Markdown)](RESEARCH_PAPER_IEEE_ARXIV.md)** & **[Two-Column IEEE Print/PDF Format (HTML)](RESEARCH_PAPER_IEEE_FORMAT.html)** (**[Download PDF](RESEARCH_PAPER_IEEE_FORMAT.pdf)**)
-* **[Comprehensive Benchmark Comparison & Architectural Overview](COMPREHENSIVE_BENCHMARK_COMPARISON_REPORT.md)**
-* **[Detailed Engineering Study Report](DETAILED_TECHNICAL_STUDY_REPORT.md)**
-* **[Executive One-Pager Summary (HTML)](ONE_PAGER_EXECUTIVE_SUMMARY.html)** (**[Download PDF](ONE_PAGER_EXECUTIVE_SUMMARY.pdf)**)
+* **[IEEE / arXiv Research Paper (PDF)](Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.pdf)** | **[Markdown](Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.md)** | **[Two-Column IEEE HTML](Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.html)**
+* **[Global MoE Benchmark Comparison & Architecture Study](Qwen3Studio_Global_MoE_Benchmark_Study.md)**
+* **[Hardware Ablation & Systems Engineering Report](Qwen3Studio_Hardware_Ablation_Report.md)**
+* **[Executive Architecture Brief (PDF)](Qwen3Studio_Executive_Architecture_Brief.pdf)** | **[HTML](Qwen3Studio_Executive_Architecture_Brief.html)**
 
 ---
 

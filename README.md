@@ -134,13 +134,10 @@ Unlike MIT CSAIL's *Recursive Language Models (RLM)* (which runs 5–15 recursiv
 | **`PowerInfer` (SJTU) & `Fiddler` (ICLR 2025)** | ReLU-Only Models / Linux PyTorch Ops | **Incompatible (SwiGLU) / ~9 tok/s PCIe** | 2,048 – 4,096 Tokens | None (Raw LLM output) |
 | **MIT CSAIL `RLM` (NeurIPS 2026) & `VeNRA`** | Datacenter GPU + Python Subprocess | **25 – 45 sec latency** *(5–15 REPL calls)* | External REPL Variable | Executes untrusted LLM Python code |
 
-### 5.3 Prior-Art Patent & Systems Differentiation (2024–2026 Audit)
+### 5.3 Per-Token GPU Router Gate Timing (`0.7 ms/token` Across 48 Layers)
 
-| Prior-Art Filing / Approach | Prior-Art Mechanism | How `Qwen3Studio` Teaches Away & Differs on 4 GB VRAM |
-| :--- | :--- | :--- |
-| **`US20250356164A1` (Intel, Nov 2025)** — *Hot Expert Buffers* | Dynamically swaps "Hot Experts" over PCIe into a GPU VRAM buffer at runtime. | Dynamic GPU hot-expert caching (`--moe-cache-mib 768`) **degrades speed by 56% (`8.57 tok/s`)** on 4 GB VRAM due to PCIe thrashing. We eliminate runtime PCIe migration via **Static Layer Pinning (`-ncmoe 41`) + Top-4 Softmax Pruning (`0.7 ms/tok` GPU router) + P-Core SIMD Locking (`39.2 tok/s`)**. |
-| **`CN121615774A` (2026) & `US11893502B2`** — *PCIe Prefetch & Device Ranking* | Prefetches experts over PCIe during speculative decoding or ranks per-expert device speed. | Keeps sparse experts in non-pageable SIMD DRAM (`--load-mode none`) bound strictly to hybrid CPU **P-Cores (`-Cr 0-15`)** and conditionally engages the `0.6B` GPU draft model only in the bandwidth-bound $K \ge 6$ regime (`+45.1%` at $K=8$). |
-| **`US20250217266A1` (IBM, 2025) & `US12353469B1`** — *Dual-AST & DB Grounding* | Compares input-vs-output ASTs for code translation or queries relational SQL databases. | Combines **`0.403 ms` single-tree static `ast.parse()`** with **unstructured document RAG numerical verification**—adding **`0.0 ms` LLM overhead** at `100%` grounding and conditionally triggering a `temp=0.10` Pass-2 Neural Critic repair pass only when an anomaly is detected. |
+* Because all 48 linear Router Gate matrices ($128 \times d_{\text{model}}$) are permanently pinned inside the NVIDIA T1000 GPU VRAM alongside Shared Attention (`-ncmoe 41`), evaluating the router gate and selecting the active `Top-4` experts out of 128 takes only **`~15 microseconds` (`0.015 ms`) per layer**—or **`~0.7 milliseconds` (`0.0007 s`) total per generated token across all 48 layers** (<2.7% of the `25.5 ms` token generation cycle).
+* Our one-time empirical calibration sweep across $K \in \{3, 4, 5, 6, 8\}$ active experts (identifying $K=4$ as the exact Pareto inflection point capturing `>92%` cumulative softmax probability mass while halving host DRAM traffic from `1.44 GB/tok` to `0.72 GB/tok`) completes in **75 seconds** of automated hardware benchmarking.
 
 ---
 

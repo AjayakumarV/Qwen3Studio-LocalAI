@@ -118,3 +118,34 @@ We tested five controlled hallucination and syntax-bug scenarios against the **A
 | **Trap 4: Hallucinated Number + Indentation Bug** | Injected `99.4%` + `IndentationError` | **`0.564 ms`** | `45.0%` | `Unverified: ['99.4'] + AST Error` | **Yes** | **`100.0%`** *(Fixed code & number)* |
 | **Case 5: Clean Grounded Control** | 100% valid numbers + valid Python code | **`0.404 ms`** | **`100.0%`** | `None (0 anomalies)` | **No (`0.0 ms` LLM cost!)** | **`100.0%`** *(Instant pass-through)* |
 | **Overall Verification Summary** | **5 Scenarios (4 Traps + 1 Control)** | **Avg `0.403 ms`** | Avg `76.0%` | **100% Defect Recall (4/4 Caught)** | **0% False Positives** | **100.0% Across All 5 Cases** |
+
+---
+
+## 6. Router Gate Weight-Selection Latency & Model-Agnostic Future-Proofing
+
+### 6.1 Per-Token GPU Router Gate Timing (`0.7 ms/token` Across 48 Layers)
+A critical systems question is how much runtime overhead the MoE Router Gate incurs when selecting the active `Top-4` experts out of 128 per layer:
+* Because all 48 linear Router Gate matrices ($128 \times d_{\text{model}}$) are permanently pinned inside the NVIDIA T1000 GPU VRAM alongside Shared Attention (`-ncmoe 41`), evaluating the router gate and computing the Top-$K$ softmax indices takes only **`~15 microseconds` (`0.015 ms`) per layer**—or **`~0.7 milliseconds` (`0.0007 s`) total per generated token across all 48 layers** (<2.7% of the `25.5 ms` token generation cycle).
+* Our one-time empirical calibration sweep across $K \in \{3, 4, 5, 6, 8\}$ active experts (identifying $K=4$ as the exact Pareto inflection point capturing `>92%` cumulative softmax probability mass while halving host DRAM traffic from `1.44 GB/tok` to `0.72 GB/tok`) completes in **75 seconds** of automated hardware benchmarking.
+
+### 6.2 Why This Architecture Is Model-Agnostic Across Future Frontier MoE Releases
+Rather than optimizing a single static model checkpoint, `Qwen3Studio` is a **Model-Agnostic Sparse MoE Execution & Deterministic Verification Harness** that solves four permanent enterprise engineering bottlenecks:
+1. **Bridging the 5-Year Workstation Hardware Gap:** Frontier open-weight model families (`Qwen3`, `DeepSeek`, `Gemma-4`, `Llama-4`) have converged on Sparse Mixture-of-Experts (MoE) architectures, while enterprise engineering laptops/desktops remain constrained to 4 GB–8 GB GPUs. Any future `.gguf` Sparse MoE model can be hot-swapped into our static hybrid partitioning + Top-$K$ routing engine in under 60 seconds.
+2. **Deterministic Verification Over Probabilistic Generation:** Even the largest cloud models remain probabilistic next-token predictors that occasionally drift on decimal tolerances (`14.2 ms` vs. `18.5 ms`). Our `0.403 ms` Symbolic Numerical & Static AST Gate (`ast.parse`) mathematically audits every emitted number and code block against ground-truth local documents before display.
+3. **Zero Marginal Cost for High-Volume Telemetry & Specification Auditing:** Running multi-pass verification across tens of thousands of CSV test logs or multi-page specification PDFs incurs zero API token cost (~3.38 million tokens/day capacity per workstation at `39.2 tok/s`).
+4. **100% Air-Gapped Data Sovereignty & Offline Lab Operation:** Operates with zero network connectivity for shielded hardware labs, vehicle proving grounds, and strict NDA/compliance environments, while isolating `INT8` Faster-Whisper Speech-to-Text (`0 MB` GPU VRAM) strictly onto CPU DRAM.
+
+---
+
+## 7. Prior-Art Systems & Patent Literature Differentiation (2024–2026 Audit)
+
+Table 6 summarizes how our architecture differs structurally and empirically from recent 2024–2026 patent publications and offloading approaches:
+
+| Prior-Art System / Publication | Core Mechanism Claimed in Prior Art | Empirical & Architectural Distinction of `Qwen3Studio` |
+| :--- | :--- | :--- |
+| **`US20250356164A1` (Intel Corp., Nov 2025)**<br/>*MoE Inference with Full & Partial Hot Expert Buffers* | Tracks expert usage counters and dynamically swaps "Hot Experts" between CPU RAM and a GPU VRAM buffer at runtime. | **Eliminates Runtime PCIe Migration on $\le 4\text{ GB}$ VRAM:** Our Stage 4 ablation proved dynamic GPU hot-expert caching (`--moe-cache-mib 768`) on a 4 GB GPU **degrades throughput by 56% (`19.54` $\rightarrow$ `8.57 tok/s`)** due to PCIe cache-miss thrashing. We replace dynamic swapping with **Static Layer Pinning (`-ncmoe 41`) + Softmax Tail Pruning (`Top-4`) + P-Core SIMD Locking (`39.2 tok/s`)**. |
+| **`CN121615774A` (2026)**<br/>*Speculative Decoding with PCIe Expert Prefetching* | Uses draft model attention states to predict and prefetch experts over PCIe into GPU VRAM. | **Zero PCIe Prefetch + Regime-Aware Draft Switching:** Keeps sparse experts in non-pageable SIMD DRAM (`--load-mode none`) and conditionally engages the GPU-resident `0.6B` draft model *only* when active expert count $K \ge 6$ saturates DRAM bandwidth (`+45.1%` boost at $K=8$). |
+| **`US11893502B2` (Microsoft, 2024)**<br/>*Dynamic Hardware Selection for Experts in MoE Model* | Ranks individual experts by device execution speed/power to assign specific experts to CPU vs. GPU. | **Activation-Frequency Tensor-Class Partitioning + Hybrid P-Core Pinning:** Pins $100\%$ of dense Shared Attention, Router Gates (`0.7 ms/tok`), and Output Heads + $M=7$ static MoE layers in VRAM while locking $L-M=41$ sparse layers in SIMD RAM bound strictly to hybrid CPU Performance cores (`-Cr 0-15`). |
+| **`US20250217266A1` (IBM, Jul 2025)**<br/>*Validating AI-Generated Code Using AST Mapping* | Validates code translation (Language A $\rightarrow$ Language B) by comparing two ASTs (input source code AST vs. output code AST). | **Single-Tree Static AST + Unstructured RAG Numerical Gate:** Operates on unstructured document Q&A (where no input code AST exists), combining `<1 ms` single-tree `ast.parse()` syntax checking with regex numerical grounding against retrieved BM25 chunks. |
+| **`US12353469B1` & `EP4617945A1` (2025)**<br/>*Database Grounding & Citation Services for LLMs* | Verifies LLM outputs against structured relational databases or standalone entity-matching services. | **Conditional Two-Pass Symbolic-to-Neural Repair Loop:** Executes in `0.403 ms` on local files, passes `100%` grounded outputs with **`0.0 ms` LLM overhead**, and conditionally triggers a low-temperature (`0.10`) Pass-2 Neural Critic repair pass injected with the exact unverified numbers and AST line errors only when `Grounding < 100%`. |
+

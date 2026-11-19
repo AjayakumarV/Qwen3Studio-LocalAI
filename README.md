@@ -143,7 +143,7 @@ Unlike MIT CSAIL's *Recursive Language Models (RLM)* (which runs 5–15 recursiv
 
 ## 6. Included Research Papers & Reports
 
-* **[IEEE / arXiv Research Paper (PDF)](Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.pdf)** | **[Markdown](Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.md)** | **[Two-Column IEEE HTML](Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.html)**
+* **[IEEE / arXiv Research Paper (PDF)](Ajayakumar_Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.pdf)** | **[Markdown](Ajayakumar_Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.md)** | **[Two-Column IEEE HTML](Ajayakumar_Vijayakumar_2026_Sparse_MoE_Symbolic_Critic_Paper.html)**
 * **[Global MoE Benchmark Comparison & Architecture Study](Qwen3Studio_Global_MoE_Benchmark_Study.md)**
 * **[Hardware Ablation & Systems Engineering Report](Qwen3Studio_Hardware_Ablation_Report.md)**
 * **[Executive Architecture Brief (PDF)](Qwen3Studio_Executive_Architecture_Brief.pdf)** | **[HTML](Qwen3Studio_Executive_Architecture_Brief.html)**
